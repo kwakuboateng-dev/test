@@ -48,6 +48,28 @@ class ConnectionManager:
             # Remove disconnected clients
             for conn in disconnected:
                 self.disconnect(conn, match_id)
+    
+    async def disconnect_all(self):
+        """Gracefully disconnect all active WebSocket connections on shutdown"""
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Disconnecting {sum(len(conns) for conns in self.active_connections.values())} active WebSocket connections")
+        
+        # Create a list of all connections to avoid modifying dict during iteration
+        all_connections = []
+        for match_id, connections in list(self.active_connections.items()):
+            for conn in connections:
+                all_connections.append((conn, match_id))
+        
+        # Disconnect all
+        for conn, match_id in all_connections:
+            try:
+                await conn.close()
+                self.disconnect(conn, match_id)
+            except Exception as e:
+                logger.error(f"Error disconnecting WebSocket for match {match_id}: {e}")
+        
+        logger.info("All WebSocket connections closed")
 
 # Global connection manager instance
 manager = ConnectionManager()

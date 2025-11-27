@@ -21,7 +21,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: odoyewu_backend
     environment:
@@ -30,7 +30,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - .:/app
     depends_on:
       db:
         condition: service_healthy

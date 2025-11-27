@@ -132,29 +132,39 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal server error" if settings.ENVIRONMENT == "production" else str(exc)}
     )
 
-# Include routers
-app.include_router(health.router)  # Health checks first
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(matches.router)
-app.include_router(chat.router)
-app.include_router(reveal.router)
-app.include_router(missions.router)
-app.include_router(safety.router)
-app.include_router(photos.router)
-app.include_router(hotspots.router)
-app.include_router(notifications.router)
+
+# Create API v1 router for versioning
+from fastapi import APIRouter
+api_v1 = APIRouter(prefix="/api/v1")
+
+# Include routers under v1
+api_v1.include_router(auth.router)
+api_v1.include_router(users.router)
+api_v1.include_router(matches.router)
+api_v1.include_router(chat.router)
+api_v1.include_router(reveal.router)
+api_v1.include_router(missions.router)
+api_v1.include_router(safety.router)
+api_v1.include_router(photos.router)
+api_v1.include_router(hotspots.router)
+api_v1.include_router(notifications.router)
 
 # Premium & Gamification Routers
-app.include_router(themes.router)
-app.include_router(icebreakers.router)
-app.include_router(mood.router)
-app.include_router(quizzes.router)
-app.include_router(events.router)
-app.include_router(tips.router)
-app.include_router(guided_chat.router)
+api_v1.include_router(themes.router)
+api_v1.include_router(icebreakers.router)
+api_v1.include_router(mood.router)
+api_v1.include_router(quizzes.router)
+api_v1.include_router(events.router)
+api_v1.include_router(tips.router)
+api_v1.include_router(guided_chat.router)
 
-logger.info("All routers registered successfully")
+# Add v1 router to app
+app.include_router(api_v1)
+
+# Health check at root level (no version - for monitoring tools)
+app.include_router(health.router)
+
+logger.info("All routers registered successfully under /api/v1")
 
 # Admin Panel Setup
 import os
@@ -208,3 +218,9 @@ async def startup_event():
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info(f"{settings.APP_NAME} shutting down")
+    # Gracefully close all WebSocket connections
+    from websocket_manager import manager
+    try:
+        await manager.disconnect_all()
+    except Exception as e:
+        logger.error(f"Error during WebSocket cleanup: {e}")
