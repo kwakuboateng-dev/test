@@ -2,7 +2,6 @@
 Enhanced file upload security with magic byte validation.
 """
 import os
-import magic
 from pathlib import Path
 from fastapi import UploadFile, HTTPException
 from config import settings
