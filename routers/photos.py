@@ -8,8 +8,8 @@ import os
 import shutil
 from pathlib import Path
 import uuid
-import imghdr  # Built-in Python module for image type detection
 import hashlib
+from file_security import validate_magic_bytes
 
 router = APIRouter(prefix="/photos", tags=["photos"])
 
@@ -18,19 +18,14 @@ UPLOAD_DIR = Path("uploads/profile_photos")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
-ALLOWED_IMAGE_TYPES = {"jpeg", "png", "webp"}  # imghdr format names
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 def is_allowed_file(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def validate_image_content(file_content: bytes) -> bool:
-    """Validate file is actually an image using imghdr"""
-    try:
-        image_type = imghdr.what(None, h=file_content)
-        return image_type in ALLOWED_IMAGE_TYPES
-    except:
-        return False
+    """Validate file is actually an image using magic bytes"""
+    return validate_magic_bytes(file_content)
 
 def sanitize_filename(filename: str) -> str:
     """Remove potentially dangerous characters from filename"""
