@@ -17,7 +17,7 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/")
+@router.get("")
 async def health_check():
     """Basic health check"""
     return {
