@@ -1,0 +1,99 @@
+{% extends "sqladmin/layout.html" %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Dashboard</h3>
+        </div>
+        <div class="card-body">
+            <div class="row row-cards">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-primary text-white avatar">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Users
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ users_count }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-green text-white avatar">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Matches
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ matches_count }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-yellow text-white avatar">
+                                        <i class="fa-solid fa-comment"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Messages
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ messages_count }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="bg-red text-white avatar">
+                                        <i class="fa-solid fa-flag"></i>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Reports
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ reports_count }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
