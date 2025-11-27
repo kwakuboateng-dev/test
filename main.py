@@ -99,7 +99,21 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Trusted host middleware (production only)
 if settings.ENVIRONMENT == "production":
-    allowed_hosts = settings.get_allowed_origins_list()
+    allowed_origins = settings.get_allowed_origins_list()
+    # Extract hostnames from URLs for TrustedHostMiddleware
+    allowed_hosts = ["localhost", "127.0.0.1", "0.0.0.0"]  # Always allow local for health checks
+    for origin in allowed_origins:
+        # Strip protocol (http://, https://)
+        if "://" in origin:
+            host = origin.split("://")[1]
+            allowed_hosts.append(host)
+            # Also add host without port if present
+            if ":" in host:
+                allowed_hosts.append(host.split(":")[0])
+        else:
+            allowed_hosts.append(origin)
+            
+    logger.info(f"Trusted hosts configured: {allowed_hosts}")
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts)
 
 # CORS - Secure configuration

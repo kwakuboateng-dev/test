@@ -20,7 +20,7 @@ services:
       - key: DEBUG
         value: false
       - key: ALLOWED_ORIGINS
-        value: http://localhost:8081,http://localhost:19006,http://localhost:19000,exp://192.168.0.168:8081
+        value: https://odoyewu-backend.onrender.com,http://localhost:8081,http://localhost:19006,http://localhost:19000,exp://192.168.0.168:8081
       - key: RATE_LIMIT_ENABLED
         value: true
       - key: LOG_LEVEL
